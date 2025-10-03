@@ -99,7 +99,8 @@ app.use((req, res) => {
 
 // Middleware 4: Global error handler
 // Catches any unhandled errors in the application
-app.use((err, req, res, next) => {
+// eslint-disable-next-line no-unused-vars
+app.use((err, req, res, _next) => {
   logger.error('Unhandled error', {
     error: err.message,
     stack: err.stack,
