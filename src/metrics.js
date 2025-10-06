@@ -46,7 +46,7 @@ register.registerMetric(todosTotal);
 
 // Export metrics for use in other files
 module.exports = {
-  register, // Main registry for /metrics endpoint
+  register, 
   httpRequestDuration,
   httpRequestTotal,
   todosCreatedTotal,

@@ -212,10 +212,9 @@ jobs:
       
       - name: Display deployment info
         run: |
-          echo "🚀 Deployment Information:"
+          echo "Deployment Information:"
           cat build-metadata.json
           echo ""
-          echo "📦 Image ready for deployment"
-          echo "🔧 Next step: Configure kubectl and deploy to EKS"
-          echo ""
-          echo "Note: Actual deployment will be configured after EKS setup"
+          echo "Image ready for deployment"
+          echo "Next step: Configure kubectl and deploy to EKS"
+         

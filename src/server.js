@@ -23,7 +23,7 @@ app.use((req, res, next) => {
   
   // Log response when finished
   res.on('finish', () => {
-    const duration = (Date.now() - startTime) / 1000; // Convert to seconds
+    const duration = (Date.now() - startTime) / 1000; 
     
     logger.info('Request completed', {
       method: req.method,
@@ -57,7 +57,6 @@ app.get('/healthz', (req, res) => {
 });
 
 // Route 2: Metrics endpoint for Prometheus
-// Exposes all metrics collected by prom-client
 app.get('/metrics', async (req, res) => {
   try {
     res.set('Content-Type', register.contentType);
@@ -98,8 +97,7 @@ app.use((req, res) => {
 });
 
 // Middleware 4: Global error handler
-// Catches any unhandled errors in the application
-// eslint-disable-next-line no-unused-vars
+
 app.use((err, req, res, _next) => {
   logger.error('Unhandled error', {
     error: err.message,

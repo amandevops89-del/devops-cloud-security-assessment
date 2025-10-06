@@ -1,0 +1,89 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: todo-api
+  namespace: todo-api
+  labels:
+    app: todo-api
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: todo-api
+  template:
+    metadata:
+      labels:
+        app: todo-api
+    spec:
+      serviceAccountName: todo-api-sa
+      securityContext:
+        fsGroup: 1001
+        runAsNonRoot: true
+        runAsUser: 1001
+      containers:
+      - name: todo-api
+        image: amandevops1/todo-api:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3000
+          name: http
+          protocol: TCP
+        env:
+        - name: PORT
+          valueFrom:
+            configMapKeyRef:
+              name: todo-api-config
+              key: PORT
+        - name: NODE_ENV
+          valueFrom:
+            configMapKeyRef:
+              name: todo-api-config
+              key: NODE_ENV
+        - name: AWS_REGION
+          valueFrom:
+            configMapKeyRef:
+              name: todo-api-config
+              key: AWS_REGION
+        - name: DYNAMODB_TABLE_NAME
+          valueFrom:
+            configMapKeyRef:
+              name: todo-api-config
+              key: DYNAMODB_TABLE_NAME
+        - name: USE_MEMORY_STORE
+          valueFrom:
+            configMapKeyRef:
+              name: todo-api-config
+              key: USE_MEMORY_STORE
+        - name: GIT_SHA
+          value: "eks-deployment"
+        resources:
+          requests:
+            memory: "128Mi"
+            cpu: "100m"
+          limits:
+            memory: "256Mi"
+            cpu: "200m"
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 3000
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 3
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /healthz
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: false
+          runAsNonRoot: true
+          runAsUser: 1001
+          capabilities:
+            drop:
+            - ALL
